@@ -1,24 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from 'react-router-dom';
+import Login from './components/login';
+import Profile from './components/profile';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/status', {
+          credentials: 'include', // Include the session cookie
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error('Failed to check auth:', error);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  if (isAuthenticated === null) {
+    return <div>Loading...</div>; // Show a loading screen while the auth status is being fetched
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path='/' element={<Login />} />
+        <Route
+          path='/profile/:username'
+          element={isAuthenticated ? <Profile /> : <Navigate to='/login' />}
+        />
+      </Routes>
+    </Router>
   );
 }
 
