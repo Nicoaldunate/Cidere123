@@ -5,8 +5,8 @@ import {
   Routes,
   Navigate,
 } from 'react-router-dom';
-import Login from './components/login';
-import Profile from './components/profile';
+import Login from './pages/login';
+import Profile from './pages/profile';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
