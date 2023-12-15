@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
-  const [username, setUsername] = useState('');
+  const [email, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
@@ -14,15 +14,14 @@ function Login() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, password }),
-      credentials: 'include', // Include the session cookie
+      body: JSON.stringify({ email, password }),
     });
 
     const data = await response.json();
 
     if (data.status === 'success') {
       localStorage.setItem('loggedIn', true);
-      navigate(`/profile/${username}`);
+      navigate(`/profile/${data.username}`); // Navigate to the profile page using the username
     } else {
       // Login failed
       alert(data.message);
@@ -31,11 +30,12 @@ function Login() {
 
   return (
     <form onSubmit={handleSubmit}>
+      <navbar />
       <label>
         Username:
         <input
           type='text'
-          value={username}
+          value={email}
           onChange={(e) => setUsername(e.target.value)}
         />
       </label>

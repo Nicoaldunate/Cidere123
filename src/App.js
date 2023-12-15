@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import Login from './pages/login';
 import Profile from './pages/profile';
+import Register from './pages/register';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -43,6 +44,7 @@ function App() {
           path='/profile/:username'
           element={isAuthenticated ? <Profile /> : <Navigate to='/login' />}
         />
+        <Route path='/register' element={<Register />} />
       </Routes>
     </Router>
   );
